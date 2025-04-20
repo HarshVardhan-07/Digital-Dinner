@@ -174,7 +174,7 @@ POSTGRES_URI=postgres://<username>:<password>@localhost:5432/digital_diner
         }
         ```
 
-- **POST /api/menu** — Add a new menu item (requires admin authentication)
+- **POST /api/menu** — Add a new menu item 
     - **Request Body**:
         ```json
         {
@@ -202,7 +202,7 @@ POSTGRES_URI=postgres://<username>:<password>@localhost:5432/digital_diner
         }
         ```
 
-- **PUT /api/menu/:id** — Update an existing menu item by ID (requires admin authentication)
+- **PUT /api/menu/:id** — Update an existing menu item by ID 
     - **Request Body**:
         ```json
         {
