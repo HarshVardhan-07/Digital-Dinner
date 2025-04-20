@@ -324,3 +324,13 @@ In your project, install the `dotenv` package to load environment variables from
 ```bash
 npm install dotenv
 
+
+## 🌐 Live Demo
+
+Check out the live project deployed on Netlify:  
+👉 [Digital Diner - Live App](https://comfy-alpaca-aa7d20.netlify.app/)
+
+> ⚠️ This frontend will work **only after** setting up:
+> - The backend server locally (`http://localhost:5000`)
+> - MongoDB (for user authentication, menu items, etc.)
+> - PostgreSQL (for order management and relational data)
