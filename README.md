@@ -12,3 +12,252 @@ Welcome to the **backend** of **Digital Diner**, a full-stack food ordering appl
 - **JWT Authentication**
 - **ES Modules** (`"type": "module"` in `package.json`)
 
+---
+
+## ⚙️ Setup & Installation
+
+### Prerequisites
+
+- **Node.js**
+- **MongoDB** (Local or Cloud instance)
+- **PostgreSQL** (Local or Cloud instance)
+- **Postman** or **Insomnia** (Optional, for API testing)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/HarshVardhan-07/Digital-Dinner.git
+cd Digital-Dinner
+
+# Backend
+cd backend
+npm install
+npm run dev
+
+# Frontend
+cd ../frontend
+npm install
+
+
+## API Endpoints
+
+### Authentication & User Management:
+- **POST /api/auth/register** — Register a new user
+    - **Request Body**:
+        ```json
+        {
+            "name": "John Doe",
+            "phone": "1234567890",
+            "password": "yourpassword"
+        }
+        ```
+    - **Response**:
+        ```json
+        {
+            "token": "your-jwt-token",
+            "name": "John Doe",
+            "phone": "1234567890"
+        }
+        ```
+
+- **POST /api/auth/login** — Login a user (returns JWT token)
+    - **Request Body**:
+        ```json
+        {
+            "phone": "1234567890",
+            "password": "yourpassword"
+        }
+        ```
+    - **Response**:
+        ```json
+        {
+            "token": "your-jwt-token",
+            "name": "John Doe",
+            "phone": "1234567890"
+        }
+        ```
+
+### Menu Management (MongoDB):
+- **GET /api/menu** — Get all menu items (with optional category filter)
+    - **Query Params** (optional): `category`
+    - **Response**:
+        ```json
+        [
+            {
+                "id": "item_id",
+                "name": "Menu Item 1",
+                "description": "Description of menu item",
+                "price": 10.99,
+                "category": "category_name"
+            },
+            {
+                "id": "item_id_2",
+                "name": "Menu Item 2",
+                "description": "Description of menu item",
+                "price": 12.99,
+                "category": "category_name"
+            }
+        ]
+        ```
+
+- **GET /api/menu/:id** — Get a single menu item by ID
+    - **Response**:
+        ```json
+        {
+            "id": "item_id",
+            "name": "Menu Item 1",
+            "description": "Description of menu item",
+            "price": 10.99,
+            "category": "category_name"
+        }
+        ```
+
+- **POST /api/menu** — Add a new menu item (requires admin authentication)
+    - **Request Body**:
+        ```json
+        {
+            "name": "New Menu Item",
+            "category": "category_name",
+            "description": "Description of new menu item",
+            "price": 14.99,
+            "imageUrl": "image_url",
+            "available": true
+        }
+        ```
+    - **Response**:
+        ```json
+        {
+            "message": "Menu item added successfully",
+            "menuItem": {
+                "id": "new_item_id",
+                "name": "New Menu Item",
+                "category": "category_name",
+                "description": "Description of new menu item",
+                "price": 14.99,
+                "imageUrl": "image_url",
+                "available": true
+            }
+        }
+        ```
+
+- **PUT /api/menu/:id** — Update an existing menu item by ID (requires admin authentication)
+    - **Request Body**:
+        ```json
+        {
+            "name": "Updated Menu Item",
+            "category": "category_name",
+            "description": "Updated description of menu item",
+            "price": 11.99,
+            "imageUrl": "updated_image_url",
+            "available": true
+        }
+        ```
+    - **Response**:
+        ```json
+        {
+            "message": "Menu item updated successfully",
+            "menuItem": {
+                "id": "item_id",
+                "name": "Updated Menu Item",
+                "category": "category_name",
+                "description": "Updated description of menu item",
+                "price": 11.99,
+                "imageUrl": "updated_image_url",
+                "available": true
+            }
+        }
+        ```
+
+### Order Management (PostgreSQL):
+- **POST /api/order** — Create a new order (JWT Protected)
+    - **Request Body**:
+        ```json
+        {
+            "items": [
+                {
+                    "menuItemId": "item_id",
+                    "quantity": 2
+                },
+                {
+                    "menuItemId": "item_id_2",
+                    "quantity": 1
+                }
+            ],
+            "totalPrice": 35.97
+        }
+        ```
+    - **Response**:
+        ```json
+        {
+            "message": "Order created successfully",
+            "order": {
+                "orderId": "order_id",
+                "status": "pending",
+                "items": [
+                    {
+                        "menuItemId": "item_id",
+                        "quantity": 2
+                    },
+                    {
+                        "menuItemId": "item_id_2",
+                        "quantity": 1
+                    }
+                ],
+                "totalPrice": 35.97
+            }
+        }
+        ```
+
+- **GET /api/orders/:phone** — Get orders by phone number (JWT Protected)
+    - **Response**:
+        ```json
+        [
+            {
+                "orderId": "order_id",
+                "phone": "1234567890",
+                "status": "completed",
+                "items": [
+                    {
+                        "menuItemId": "item_id",
+                        "quantity": 2
+                    }
+                ],
+                "totalPrice": 22.98,
+                "orderDate": "2025-04-19T14:30:00Z"
+            },
+            {
+                "orderId": "order_id_2",
+                "phone": "1234567890",
+                "status": "pending",
+                "items": [
+                    {
+                        "menuItemId": "item_id_2",
+                        "quantity": 1
+                    }
+                ],
+                "totalPrice": 12.99,
+                "orderDate": "2025-04-20T10:00:00Z"
+            }
+        ]
+        ```
+## JWT Authentication with .env Setup
+
+### Overview
+JWT (JSON Web Tokens) is used for secure authentication in the app. The token is signed with a secret key and is passed in the request header as `Authorization` for protected routes.
+
+For enhanced security, sensitive information, such as the JWT secret key, should be stored in environment variables using a `.env` file.
+
+### Setting Up `.env` for JWT
+1. **Create a `.env` File:**
+   In the root of your project, create a file named `.env` if you don't already have one.
+
+2. **Add the JWT Secret to `.env`:**
+   Add the following line to your `.env` file to store your JWT secret key:
+
+
+Replace `your-secret-key` with a strong secret string (e.g., a random alphanumeric string). This key is used to sign and verify JWT tokens.
+
+3. **Install `dotenv` Package:**
+In your project, install the `dotenv` package to load environment variables from the `.env` file.
+```bash
+npm install dotenv
